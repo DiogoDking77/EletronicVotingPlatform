@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Plataforma de Votação Online</title>
+  <script src="https://kit.fontawesome.com/fc926f45c0.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<nav class="z-20">
+  <div class="nav-logo z-20">
+    <img src="assets/images/atlanseportugal_logo.png" alt="logo">
+  </div>
+  <button class="nav-button z-20" (click)="navigateToHome()">
+    <i class="fas fa-home"></i> Home
+  </button>
+
+  <button class="nav-button z-20" (click)="navigateToCreateVotations()">
+    <i class="fas fa-poll"></i> Create Votings
+  </button>
+
+  <button class="nav-button z-20" (click)="navigateToProfile()">
+    <i class="fas fa-user"></i>Profile
+  </button>
+
+  <button class="nav-button z-20" (click)="logout()">
+    <i class="fas fa-sign-out-alt"></i>Logout
+  </button>
+</nav>
+
+<main class="bg-white p-2" style="background: #ff9751">
+  <div *ngIf="votingDetails && themeName && UserDetails && contentVisible" class="p-6 grid grid-cols-3 border-b-10 relative" style="background: #ff9751; height: 40vh">
+    <div class="relative col-span-2">
+      <h2 class="text-4xl font-bold text-white underline mb-1">{{ votingDetails.name }}</h2>
+      <h3 class="text-2xl font-medium text-white mb-2">Theme: {{ themeName.theme }}</h3>
+      <span class="border-2 rounded-md px-1 block" style="border-color: #f16f3e;display: block; overflow-y: auto; height: 20vh; word-wrap: break-word;">
+        <p class="text-white">
+          {{votingDetails.information}}
+        </p>
+      </span>
+    </div>
+  </div>
+
+  <div class="rounded border-2" [style.height]="contentVisible ? '48vh' : '88vh'" style="background: white; display: flex; border-color: #f16f3e;">
+    <!-- Sidebar - Top Section (Categories) -->
+    <div class="rounded" style="width: 15%; background: #f2f2f2; padding: 10px; display: flex; flex-direction: column;  overflow-y: auto;">
+      <!-- Sidebar - Top Section (Categories) -->
+      <div style="flex: 90%; overflow-y: {{ categories.length > 0 ? 'auto' : 'hidden' }};">
+        <ul>
+          <li *ngFor="let categoria of categories">
+            <a href="javascript:void(0);" (click)="loadPhases(categoria)">
+              {{ categoria.name }}
+              <div class="descricao" *ngIf="categoriaSelecionada === categoria.name">
+                <p class="text-xs">{{ categoria.information }}</p>
+              </div>
+            </a>
+            <!-- Divisória horizontal entre categorias -->
+            <hr style="margin-top: 5px; margin-bottom: 5px;">
+          </li>
+        </ul>
+      </div>
+
+      <!-- Divisória horizontal entre Top Section e Bottom Section -->
+      <hr style="margin-top: 10px; margin-bottom: 10px;">
+
+      <!-- Sidebar - Bottom Section (Invite Users Button) -->
+      <div class="mt-2" style="flex: 10%; display: flex; flex-direction: column; justify-content: flex-end;">
+        <div class="text-center mb-2.5">
+          <button *ngIf="categoriaSelecionada && canInvite" class="invite-button" (click)="inviteUsers()">
+            <i class="fas fa-envelope"></i> Invite Users
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <!-- Main Content -->
+    <div style="width: 85%; display: flex; flex-direction: column;" [style.height]="contentVisible ? '48vh' : '88vh'">
+      <div class="text-center">
+        <button  class="p-1 rounded-b-lg text-white border-l border-r border-b" (click)="toggleContentVisibility()" style="border-color: #ff9751; background: #f16f3e">
+          {{ contentVisible ? 'Ocult Details' : 'Show Details' }}
+        </button>
+      </div>
+
+      <div *ngIf="categoriaSelecionada && phases.length > 0" class="p-3  relative" style="flex-grow: 2; overflow-y: auto;">
+        <div class="mt-4" *ngIf="this.phases[this.displayedPhaseIndex]">
+          <div style="position: absolute;" class="ml-1 absolute left-0 top-0 text-xs">
+            Start Date: {{formatarData(this.phases[this.displayedPhaseIndex].openingDate)}}
+            <br>
+            End Date:{{formatarData(this.phases[this.displayedPhaseIndex].closingDate)}}
+          </div>
+
+          <div style="position: absolute;" class="mr-1 absolute right-0 top-0 text-xs text-right">
+            <!-- Exibe 'Private' se a fase for privada -->
+            <p *ngIf="this.phases[this.displayedPhaseIndex].privacy === true">
+              <i *ngIf="!isInvited" class="fas fa-lock mr-1 text-red-500"></i>
+              <i *ngIf="isInvited" class="fas fa-lock-open mr-1 text-red-500"></i>
+              <strong>This phase is private</strong>
+              <br>
+              {{this.isInvited ? 'You are invited' : 'You are not invited'}}
+            </p>
+
+            <!-- Exibe 'Public' se a fase for pública -->
+            <p *ngIf="this.phases[this.displayedPhaseIndex].privacy === false">
+              <i class="fas fa-globe mr-1 text-green-500"></i>
+              <strong>This phase is public</strong>
+            </p>
+            <p>{{this.displayedPhaseIndex + 1}}/{{phases.length}}</p>
+          </div>
+
+          <div class="mt-4 p-2" style="flex-grow: 1;">
+            <div class="flex items-center">
+              <div class="w-full relative pt-1">
+                <div class="flex mb-2 justify-center items-center">
+                  <!-- Botão para a fase anterior -->
+                  <button *ngIf="showPreviousButton" class="cursor-pointer p-2" (click)="navigateToPreviousPhase()">
+                    <i class="fas fa-arrow-left text-orange-500"></i>
+                  </button>
+                  <!-- Botão para a fase atual ou mais recente -->
+                  <button class="cursor-pointer p-2" (click)="navigateToRecurrentPhase()">
+                    Recorrent Phase
+                  </button>
+                  <!-- Botão para a próxima fase -->
+                  <button *ngIf="showNextButton" class="cursor-pointer p-2" (click)="navigateToNextPhase()">
+                    <i class="fas fa-arrow-right text-orange-500"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 p-2" style="flex-grow: 1;">
+            <div class="flex justify-between ">
+              <h3 class="text-lg font-semibold mb-2">
+                Vote Options:
+                <span (click)="toggleInfoVisibility()" style="cursor: pointer;">
+                  <i class="fas fa-info-circle"></i>
+                </span>
+              </h3>
+              <div>
+                <button *ngIf="isOwner" class='invite-button mb-1' (click)="seeResults()">See Results</button>
+              </div>
+            </div>
+
+            <app-voting-info-card class="flex justify-center" *ngIf="showInfo"
+                                  [phaseType]="phases[displayedPhaseIndex].type"
+                                  [nChoices]="phases[displayedPhaseIndex].n_choices"
+                                  [orderPoints]="phases[displayedPhaseIndex].orderPoints"
+                                  [nWinners]="phases[displayedPhaseIndex].n_winners"
+                                  [nPhases]="phases.length"
+                                  [PhasesIndex]="displayedPhaseIndex">
+            </app-voting-info-card>
+
+            <div *ngIf="showResults" class="grid" [class.grid-cols-4]="!contentVisible" [class.grid-cols-6]="contentVisible" [style.flexWrap]="!contentVisible ? 'nowrap' : 'wrap'">
+              <ng-container *ngFor="let option of voteOptions; let i = index">
+                <button
+                  class="p-2 border rounded-md relative"
+                  [class.p-1]="!contentVisible"
+                  [class.bg-orange-300]="!isOptionDisabled[option.id]"
+                  [class.text-white]="!isOptionDisabled[option.id]"
+                  [class.bg-gray-300]="isOptionDisabled[option.id]"
+                  [class.text-gray-500]="isOptionDisabled[option.id]"
+                  [disabled]="isOptionDisabled[option.id]"
+                  [class.selected]="isSelected(option.id)"
+                  (click)="toggleVoteOption(option)"
+                  style="flex-grow: 1;">
+                  <p [innerHTML]="showInfo ? formatOptionInfo(option) : option.name"></p>
+                  <!-- Adiciona o círculo com a posição selecionada apenas para Points Voting -->
+                  <div *ngIf="isSelected(option.id) && phases[displayedPhaseIndex].type === 'Points Voting'" class="position-indicator">
+                    <span style="font-weight: bold; display: inline-block; width: 24px; height: 24px; line-height: 24px; text-align: center; border-radius: 50%; background-color: {{ getCircleColor(getPositionInSelectedOptions(option.id, this.phases[this.displayedPhaseIndex].id)) }}; color: white;">
+                      {{ getOrdinalNumber(getPositionInSelectedOptions(option.id, this.phases[this.displayedPhaseIndex].id)) }}
+                    </span>
+                  </div>
+                </button>
+              </ng-container>
+
+            </div>
+            <div class="overflow-x-auto rounded-lg" *ngIf="!showResults">
+              <div *ngIf="!isPoints">
+              <table class="min-w-full bg-white border border-gray-300" style="background: #ff9751">
+                <thead>
+                <tr>
+                  <th class="py-2 px-4 border-b border-r text-center text-white">Rank</th>
+                  <th class="py-2 px-4 border-b border-r text-center text-white">Option</th>
+                  <th class="py-2 px-4 border-b border-r text-center text-white">Information</th>
+                  <th class="py-2 px-4 border-b border-r text-center text-white">Votes</th>
+                  <th class="py-2 px-4 border-b border-r text-center text-white">Percentage</th>
+                  <th class="py-2 px-4 border-b border-r text-center text-white">Winner</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let result of results" class="bg-orange-200">
+                  <td class="py-2 px-4 border-b border-r bg-white text-center">{{ result.voteRank }}</td>
+                  <td class="py-2 px-4 border-b border-r bg-white text-center">{{ result.option }}</td>
+                  <td class="py-2 px-4 border-b border-r bg-white text-center">{{ result.info }}</td>
+                  <td class="py-2 px-4 border-b border-r bg-white text-center">{{ result.numberOfVotes }}</td>
+                  <td class="py-2 px-4 border-b border-r bg-white text-center">{{ result.percentage }}%</td>
+                  <td class="py-2 px-4 border-b bg-white text-center">{{ result.winner ? 'Yes' : 'No' }}</td>
+                </tr>
+                </tbody>
+              </table>
+              </div>
+              <div *ngIf="isPoints">
+                <table class="min-w-full bg-white border border-gray-300" style="background: #ff9751">
+                  <thead>
+                  <tr>
+                    <th class="py-2 px-4 border-b border-r text-center text-white">Rank</th>
+                    <th class="py-2 px-4 border-b border-r text-center text-white">Option</th>
+                    <th class="py-2 px-4 border-b border-r text-center text-white">Information</th>
+                    <th class="py-2 px-4 border-b border-r text-center text-white">Points</th>
+                    <th class="py-2 px-4 border-b border-r text-center text-white">Percentage</th>
+                    <th class="py-2 px-4 border-b border-r text-center text-white">Winner</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let result of resultsInPoints; let i = index" class="bg-orange-200">
+                  <td class="py-2 px-4 border-b border-r bg-white text-center">{{ result.rank }}</td>
+                    <td class="py-2 px-4 border-b border-r bg-white text-center">{{ result.option }}</td>
+                    <td class="py-2 px-4 border-b border-r bg-white text-center">{{ result.info }}</td>
+                    <td class="py-2 px-4 border-b border-r bg-white text-center">{{ result.points }}</td>
+                    <td class="py-2 px-4 border-b border-r bg-white text-center">{{ result.percentage }}%</td>
+                    <td class="py-2 px-4 border-b border-r bg-white text-center">{{ i < this.phases[this.displayedPhaseIndex].n_winners ? 'Yes' : 'No' }}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 p-2">
+        <div class="flex items-center justify-center mb-4" *ngIf="showResults">
+          <!-- Botão para submeter o voto -->
+          <button class="cursor-pointer p-2 controler-vote submit border-2 border-green-500 text-green-500"
+                  (click)="submitVote()" [disabled]="isSubmitButtonDisabled()">
+            Submit Vote
+          </button>
+
+          <!-- Botão para deletar o voto -->
+          <button class="cursor-pointer p-2 controler-vote delete border-2 border-red-500 text-red-500"
+                  (click)="deleteVote()" [disabled]="isDeleteButtonDisabled()">
+            Delete Vote
+          </button>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

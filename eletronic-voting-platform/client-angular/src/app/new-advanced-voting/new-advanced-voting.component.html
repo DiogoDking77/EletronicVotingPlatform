@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Plataforma de Votação Online</title>
+  <script src="https://kit.fontawesome.com/fc926f45c0.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<header>
+  <nav class="z-20">
+    <div class="nav-logo z-20">
+      <img src="assets/images/atlanseportugal_logo.png" alt="logo">
+    </div>
+    <button class="nav-button z-20" (click)="navigateToHome()">
+      <i class="fas fa-home"></i> Home
+    </button>
+
+    <button class="nav-button z-20" (click)="navigateToCreateVotations()">
+      <i class="fas fa-poll"></i> Create Votatings
+    </button>
+
+    <button class="nav-button z-20" (click)="navigateToProfile()">
+      <i class="fas fa-user"></i>Profile
+    </button>
+
+    <button class="nav-button z-20" (click)="logout()">
+      <i class="fas fa-sign-out-alt"></i>Logout
+    </button>
+  </nav>
+</header>
+<main>
+  <div class="card">
+    <div class="card-header flex items-center justify-between">
+      <label class="text-xxl font-bold p-1.5">
+        Create your Votating
+      </label>
+      <button class="nav-button-2" (click)="navigateToCasualVoting()">
+        <i class="fas fa-cogs"></i>  Casual Voting
+      </button>
+    </div>
+    <form class="card-content w-full">
+      <div class="flex flex-wrap -mx+3 mb-2">
+        <div class="w-full md:w-6/12 px-3 md:mb-0">
+          <label class="block tracking-wide text-base font-bold mt-2 text-#f16f3e" for="grid-first-name">
+            Voting Name:
+          </label>
+          <input class="appearance-none block w-full border-2 border-orange-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none text-orange-500" id="grid-first-name" type="text" placeholder="" style="background-color: #ffebdd;" [(ngModel)]="votationName" name="votationName">
+        </div>
+        <div class="w-full md:w-2/12 px-3"></div>
+        <div class="w-full md:w-4/12 px-3">
+          <label class="block tracking-wide text-base font-bold mt-2 text-#f16f3e" for="grid-state">
+            Theme
+          </label>
+          <div class="relative">
+            <select class="block appearance-none w-full border-2 border-orange-500 text-orange-500 py-3 px-4 pr-8 rounded leading-tight focus:outline-none"
+                    id="grid-state" style="background-color: #ffebdd;" (change)="selecionarTema($event)">
+
+              <!-- Opções serão preenchidas dinamicamente -->
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-orange-500">
+              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="flex flex-wrap -mx+3 mb-2">
+        <div class="w-full md:w-12/12 px-3">
+          <label class="block tracking-wide text-base font-bold mt-2 text-#f16f3e" for="grid-textarea">
+            Description
+          </label>
+          <textarea class="block w-full h-28 border-2 border-orange-500 text-orange-500 py-3 px-4 pr-8 rounded leading-tight focus:outline-none" id="grid-textarea" style="background-color: #ffebdd; resize: none;" [(ngModel)]="votationDescription" name="votationDescription"></textarea>
+
+        </div>
+      </div>
+      <div class="w-full md:w-6/12 px-3 md:mb-0">
+        <input type="checkbox" class="appearance-none w-6 h-6 border-2 border-orange-500 bg-white rounded checked:bg-orange-500 mr-2 relative"
+               [(ngModel)]="haveCategories" name="privacidade" id="privateVotation">
+        <label for="privateVotation" class="text-orange-500 relative z-10 font-bold">Add Categories</label>
+      </div>
+      <div class="flex flex-wrap -mx+3 mb-2" [ngClass]="{'opacity-50': !haveCategories}">
+        <div class="w-full md:w-4/12 px-3 md:mb-0">
+          <label class="block tracking-wide text-base font-bold mt-2 text-#f16f3e">
+            Category Name
+          </label>
+          <input #nameInput
+                 class="appearance-none block w-full border-2 border-orange-500 rounded py-3 px-4 leading-tight focus:outline-none text-orange-500 placeholder-orange-300"
+                 type="text"
+                 style="background-color: #ffebdd;"
+                 placeholder="Enter your options and press Enter"
+                 [disabled]="!haveCategories">
+        </div>
+        <div class="w-full md:w-6/12 px-3 md:mb-0">
+          <label class="block tracking-wide text-base font-bold mt-2 text-#f16f3e">
+            Information
+          </label>
+          <input #informationInput
+                 class="appearance-none block w-full border-2 border-orange-500 rounded py-3 px-4 leading-tight focus:outline-none text-orange-500 placeholder-orange-300"
+                 type="text"
+                 style="background-color: #ffebdd;"
+                 placeholder="Enter your options and press Enter"
+                 [disabled]="!haveCategories">
+        </div>
+        <div class="w-full md:w-2/12 px-3 md:mb-0 place-self-center mt-auto">
+          <button class="w-full font-bold bg-orange-500 text-white px-4 py-3 rounded" (click)="addCategory()" [disabled]="!haveCategories">Add</button>
+        </div>
+      </div>
+      <div class="flex flex-wrap -mx+3 mb-2">
+        <div class="w-full md:w-12/12 px-3">
+          <div>
+            <div class="options-container appearance-none block h-32 w-full border-2 border-orange-500 rounded py-3 px-4 leading-tight focus:outline-none text-orange-500 placeholder-orange-300" style="background-color: #ffebdd;" [ngClass]="{'opacity-50': !haveCategories}">
+              <div *ngFor="let option of optionContainer; let i = index" class="option h-7">
+                {{ option[0] }}
+                <span class="remove-option" (click)="removeOption(i)">x</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="image-section text-center">
+    <img src="assets/images/new%20votation.png" alt="logo">
+    <div class="inline-block">
+    </div>
+    <br>
+    <button class="font-bold" type="button" (click)="criarvotacao(votationName, votationDescription, haveCategories, StartDate, EndDate )">
+      <i class="fas fa-plus mr-6 fa-2xl mt-2" style="color: #ffffff;"></i>Create
+    </button>
+  </div>
+
+</main>
+</body>
+</html>

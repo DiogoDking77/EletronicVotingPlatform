@@ -1,0 +1,13 @@
+package com.atlanse
+
+import io.micronaut.runtime.Micronaut
+import groovy.transform.CompileStatic
+
+@CompileStatic
+class Application {
+
+    static void main(String[] args) {
+        Micronaut.run(Application, args)
+    }
+}
+ // É para correr aqui

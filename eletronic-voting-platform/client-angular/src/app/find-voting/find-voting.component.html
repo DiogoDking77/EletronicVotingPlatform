@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Plataforma de Votação Online</title>
+  <script src="https://kit.fontawesome.com/fc926f45c0.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<header  class="z-20" style="height: 10vh;">
+  <div class="z-20">
+    <nav class="z-20">
+      <div class="nav-logo z-20">
+        <img src="assets/images/atlanseportugal_logo.png" alt="logo">
+      </div>
+      <button class="nav-button z-20" (click)="navigateToHome()">
+        <i class="fas fa-home"></i> Home
+      </button>
+
+      <button class="nav-button z-20" (click)="navigateToCreateVotations()">
+        <i class="fas fa-poll"></i> Create Votings
+      </button>
+
+      <button class="nav-button z-20" (click)="navigateToProfile()">
+        <i class="fas fa-user"></i>Profile
+      </button>
+
+      <button class="nav-button z-20" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i>Logout
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main style="background: #fff6cc; ; height: 90vh;">
+  <div class="grid grid-cols-3 gap-4  place-content-center ">
+    <div class="mt-5 ml-5 rounded-lg bg-white" style="border: 5px solid #ff9751; overflow-y: auto; height: 85vh">
+      <button (click)="setTab('all')" [class.active]="selectedTab === 'all'" class="m-2 p-2 rounded-lg bg-blue-500 text-white">
+        <i class="fas fa-globe"></i> All
+      </button>
+      <button (click)="setTab('owned')" [class.active]="selectedTab === 'owned'" class="m-2 p-2 rounded-lg bg-green-500 text-white">
+        <i class="fas fa-star"></i> Owned
+      </button>
+      <button (click)="setTab('invited')" [class.active]="selectedTab === 'invited'" class="m-2 p-2 rounded-lg bg-purple-500 text-white">
+        <i class="fas fa-envelope"></i> Invited
+      </button>
+      <button (click)="setTab('voted')" [class.active]="selectedTab === 'voted'" class="m-2 p-2 rounded-lg bg-orange-500 text-white">
+        <i class="fas fa-check"></i> Voted
+      </button>
+
+      <div *ngIf="getFilteredVotings().length === 0" class="flex items-center place-content-center text-center text-gray-400 mt-5">
+        <p *ngIf="selectedTab === 'all'" class="empty-message">There are no votings yet.</p>
+        <p *ngIf="selectedTab === 'owned'" class="empty-message">You haven't created any voting yet.</p>
+        <p *ngIf="selectedTab === 'invited'" class="empty-message">You haven't been invited to any voting yet.</p>
+        <p *ngIf="selectedTab === 'voted'" class="empty-message">You haven't voted in any voting yet.</p>
+      </div>
+
+      <div *ngFor="let voting of getFilteredVotings()" (click)="selectVoting(voting)">
+        <div class="rounded-lg overflow-hidden shadow-md p-3 m-2" style="background: #f16f3e">
+          <h2 class="text-white text-xl font-bold mb-1">{{ voting.name }}</h2>
+          <p class="text-white">{{ voting.theme }}</p>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div *ngIf="selectedVoting" class="col-span-2 mt-5 mr-5 rounded-lg">
+      <div class="p-4 rounded-lg overflow-hidden shadow-md h-5/6" style="background: #ff9751">
+        <h2 class="text-white text-5xl font-bold mb-2">{{ selectedVoting.name }}</h2>
+        <p class="text-white text-xl">Theme: {{ selectedVoting.theme }}</p>
+        <!-- Card 2: Information -->
+        <div class="bg-gray-100 p-4 mt-2 rounded-lg" style="border: 2px solid #f16f3e">
+          <p class="text-gray-700 text-xl">{{ selectedVoting.information }}</p>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-gray-100 p-4 mt-2 rounded-lg" style="border: 2px solid #f16f3e; color: #f16f3e">
+            <p class="text-gray-700 text-xl">Owner: {{ selectedVoting.owner }}</p>
+          </div>
+          <div class="bg-gray-100 p-4 mt-2 rounded-lg" style="border: 2px solid #f16f3e">
+            <p class="text-gray-700 text-xl">Creation Date: {{ formatarData(selectedVoting.creationDate) }}</p>
+          </div>
+        </div>
+
+      </div>
+      <div class="h-1/6 grid grid-cols-1">
+        <div class="place-self-center">
+          <button (click)="onEnterClick()" class="text-white w-40 h-14 rounded-lg font-bold" style="background: #f16f3e">Enter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+
+
+</body>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Plataforma de Votação Online</title>
+  <script src="https://kit.fontawesome.com/fc926f45c0.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<nav>
+  <div class="nav-logo z-20">
+    <img src="assets/images/atlanseportugal_logo.png" alt="logo">
+  </div>
+</nav>
+
+<main class="grid grid-cols-10 gap-4 p-2 px-4 relative h-dvh">
+  <div class="card col-span-6">
+    <div class="card-header ">
+      <label class="text-xxl font-bold">
+        Register
+      </label>
+    </div>
+    <form class="card-content max-h-75vh overflow-hidden px-3">
+      <div class="flex flex-wrap -mx-3 mb-2">
+        <div class="w-full px-3 md:mb-0">
+          <label class="block tracking-wide text-base font-bold mt-2 text-#f16f3e" for="grid-name">
+            Name:
+          </label>
+          <input class="appearance-none block w-full border-2 border-orange-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none text-orange-500" id="grid-name" type="text" placeholder="" style="background-color: #ffebdd;" [(ngModel)]="name" name="name">
+        </div>
+      </div>
+      <div class="flex flex-wrap -mx-3 mb-2">
+        <div class="w-full px-3 md:mb-0">
+          <label class="block tracking-wide text-base font-bold mt-2 text-#f16f3e" for="grid-email">
+            Email:
+          </label>
+          <input class="appearance-none block w-full border-2 border-orange-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none text-orange-500" id="grid-email" type="email" placeholder="" style="background-color: #ffebdd;" [(ngModel)]="email" name="email">
+        </div>
+      </div>
+      <div class="flex flex-wrap -mx-3 mb-2">
+        <div class="w-full px-3 md:mb-0">
+          <label class="block tracking-wide text-base font-bold mt-2 text-#f16f3e" for="grid-first-password">
+            Password:
+          </label>
+          <div class="flex items-center relative justify-center mb-3">
+            <input class="appearance-none block w-full border-2 border-orange-500 rounded py-3 px-4  leading-tight focus:outline-none text-orange-500"
+                   id="grid-first-password"
+                   [type]="showFirstPassword ? 'text' : 'password'"
+                   placeholder=""
+                   style="background-color: #ffebdd;"
+                   [(ngModel)]="firstPassword"
+                   name="firstPassword">
+
+            <button type="button" class="focus:outline-none icon-button absolute right-3 " (click)="toggleFirstPassword()">
+              <i class="fas" [ngClass]="showFirstPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+      <div class="flex flex-wrap -mx-3 mb-2">
+        <div class="w-full px-3 md:mb-0">
+          <label class="block tracking-wide text-base font-bold mt-2 text-#f16f3e" for="grid-password">
+            Confirm Password:
+          </label>
+          <div class="flex items-center relative justify-center mb-3">
+            <input class="appearance-none block w-full border-2 border-orange-500 rounded py-3 px-4  leading-tight focus:outline-none text-orange-500"
+                   id="grid-password"
+                   [type]="showPassword ? 'text' : 'password'"
+                   placeholder=""
+                   style="background-color: #ffebdd;"
+                   [(ngModel)]="password"
+                   name="password">
+            <button type="button" class="focus:outline-none icon-button absolute right-3 " (click)="togglePassword()">
+              <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+        <div class="flex flex-wrap -mx-3 mb-2">
+
+              <div class="w-full md:w-6/12 px-3 md:mb-0">
+                <label class="block tracking-wide text-base font-bold mt-2 text-#f16f3e" for="grid-birth-date">
+                  Birth Date
+                </label>
+                <input class="appearance-none block w-full border-2 border-orange-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none text-orange-500 placeholder-orange-300" style="background-color: #ffebdd; color:#f16f3e;" id="grid-birth-date" type="date" inputmode="numeric" placeholder="Select a date"  [(ngModel)]="dateOfBirth" name="dateOfBirth">
+              </div>
+              <div class="w-full md:w-2/12 px-3"></div>
+              <div class="w-full md:w-4/12 px-3">
+              <label class="block tracking-wide text-base font-bold mt-2 text-#f16f3e" for="genre-dropdown">
+                Gender:
+              </label>
+              <div class="relative">
+                <select class="block appearance-none w-full border-2 border-orange-500 text-orange-500 py-3 px-4 pr-8 rounded leading-tight focus:outline-none"
+                        id="genre-dropdown" style="background-color: #ffebdd;" [(ngModel)]="genre" name="genre">
+                  selectElement.innerHTML = '<option value="" disabled selected>Select a gender</option>';
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-orange-500">
+                  <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+              </div>
+            </div>
+        </div>
+      <div class="flex flex-wrap -mx-3 mb-2">
+        <div class="w-full md:w-6/12 px-3">
+          <label class="block tracking-wide text-base font-bold mt-2 text-#f16f3e" for="grid-nationality">
+            Nationality:
+          </label>
+          <select class="appearance-none block w-full border-2 border-orange-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none text-orange-500"
+                  id="grid-nationality" style="background-color: #ffebdd;"
+                  [(ngModel)]="nationality" name="nationality">
+            <option value="" disabled selected>Select nationality</option>
+            <!-- Adicione as opções dinamicamente aqui usando *ngFor -->
+            <option *ngFor="let uniqueNationality of uniqueNationalities" [value]="uniqueNationality">
+              {{ uniqueNationality }}
+            </option>
+          </select>
+
+
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="image-section text-center col-span-4">
+    <img src="assets/images/register.png" alt="logo" class="mx-auto block">
+    <label for="register">
+      Already have an account? <a routerLink="/login" class="font-medium text-blue-600 dark:text-orange-950 hover:underline">Login</a>
+    </label>
+    <br>
+
+    <button class="font-bold" type="button" (click)="register(name, genre, email, password, dateOfBirth, firstPassword)">
+      Submit<i class="fas fa-arrow-right ml-6 mr-6 fa-xl mt-2" style="color: #ffffff;"></i>
+    </button>
+  </div>
+
+
+</main>
+</body>
+</html>
+

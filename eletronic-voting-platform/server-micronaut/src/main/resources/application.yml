@@ -1,0 +1,43 @@
+micronaut:
+  application:
+    name: proj3EletronicVoting
+  server:
+    port: ${GOF_PORT:8090}
+    cors:
+      enabled: true
+      configurations:
+        ui:
+          allowed-origins:
+            - http://localhost:4200
+netty:
+  default:
+    allocator:
+      max-order: 3
+
+datasources:
+  default:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/${POSTGRES_DB:eletronicVoting}
+    driverClassName: org.postgresql.Driver
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:123456}
+    schema: eletronicVoting
+    hibernate:
+      ddl-auto: update
+
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        show_sql: true
+
+liquibase:
+    enabled: true
+    datasources:
+        default:
+            change-log: 'classpath:db/liquibase-changelog.xml'
+            enabled: true
+
+
+

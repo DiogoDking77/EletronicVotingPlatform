@@ -1,0 +1,167 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: #ff9751;
+  padding: 0;
+  margin: 0; /* Certifique-se de remover qualquer margem padrão do body */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Isso garante que o body tenha pelo menos 100% da altura da tela */
+}
+
+header {
+  background-color: #ff9751;
+  height: 60px;
+  padding: 10px 0;
+}
+
+header {
+  background-color: #ff9751;
+  padding: 10px 0;
+}
+
+nav {
+  text-align: center;
+  display: flex;
+  align-items: center; /* Centraliza verticalmente */
+}
+
+.nav-logo {
+  width: 50px; /* Largura igual à altura */
+  height: 50px; /* Altura igual à altura da nav */
+  margin-right: 10px;
+  margin-left: 10px;
+  border-radius: 100%;
+  background: #011feb;
+  text-align: center;
+}
+
+.nav-logo img {
+  width: 100%; /* Ajusta a largura da imagem para preencher a div */
+  height: 100%; /* Ajusta a altura da imagem para preencher a div */
+  border-radius: 50%; /* Garante que a imagem seja exibida como um círculo */
+}
+
+.nav-button {
+  background-color: #f16f3e;
+  color: #fff;
+  border: 2px solid #ffa56f;
+  border-radius: 10px;
+  padding: 8px 16px;
+  margin: 0 10px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 15%;
+}
+
+.nav-button:hover {
+  background-color: #ffa56f;
+  color: #fff;
+}
+
+main{
+  display: grid;
+  grid-template-columns: 60% 40%; /* Duas colunas para o card e o conteúdo à direita */
+  gap: 20px;
+  padding: 20px;
+}
+
+.content-section{
+
+}
+
+.labels {
+  color: #f16f3e;
+  font-size: 24px;
+}
+
+.welcome {
+  font-size: 100%;
+  text-align: center;
+  flex: 1; /* Isso faz com que a seção 'welcome' ocupe o espaço disponível na tela */
+}
+.card {
+  background-color: #f16f3e;
+  border-radius: 15px; /* Borda com curva redonda */
+  padding: 0.5%;
+  width: 100%;
+  margin-left: 1.5%;
+}
+
+.card-header {
+  color: #fff;
+  background-color: #f16f3e;
+  padding: 10px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  font-size: 30px;
+}
+
+.card-content {
+  background-color: #fff;
+  color: #f16f3e;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  height: max-content;
+}
+
+form {
+  width: 90%;
+}
+
+.login{
+  margin-left: 2.5%;
+  width: 100%;
+}
+
+
+
+
+
+input {
+  background-color: #ffebdd;
+  border: 1px solid #f16f3e;
+  padding: 5px;
+  border-radius: 3px;
+  color: #f16f3e;
+  font-size: 24px;
+  width: 100%;
+  margin-bottom: 1%;
+}
+
+.btn-div{
+  text-align: center;
+}
+
+.submit{
+  background-color: #f16f3e;
+  height: 80px;
+  width: 230px;
+  border-radius: 15px;
+  border: 2px solid #ff9751;
+  font-size: 50px;
+  color: white;
+}
+
+.submit:hover{
+  background-color: #ff4d00;
+}
+
+
+.image-section {
+  text-align: center;
+}
+
+footer {
+  background-color: #ccc;
+  padding: 20px 0;
+}
+
+h1, p {
+  color: #ffffff;
+}
